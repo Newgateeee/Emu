@@ -1,17 +1,17 @@
-limpant     MACRO                       
+limpant     MACRO                       ;Macro que limpia la pantalla.
             mov AH, 0Fh                 ;Funcion 0F(Modo de video).
             int 10h                     ;De la interrupcion 10h.
             mov AH, 0                   ;Funcion 0 (cambia el modo de video).
             int 10h                     ;De la interrupcion 10h.
 endm                                    ;Fin de macro
 
-imprime     MACRO cadena                
+imprime     MACRO cadena                ;Macro que imprime una cadena de caracteres
 	    lea DX, cadena              ;Asigna cadena a DX
 	    mov AH, 09                  ;Funcion 09 de la int 21 para... 
 	    int 21h                     ;...imprimir una cadena de caracteres
 endm                                    ;Fin de macro
 
-scand       MACRO                       
+scand       MACRO                       ;Macro que lee el dato ingresado por el usuario     
             mov AH, 01                  ;y lo guarda en AL
             int 21h                     ;
 endm                                    ;Fin de macro
@@ -23,7 +23,7 @@ restR       MACRO                       ;Macro que restituye AX, BX, CX y DX
             sub DX, DX                  ;Restituye DX
 endm                                    ;Fin de macro
 
-restV       MACRO                       
+restV       MACRO                       ;Macro que restituye todas las variables 
                                         
                                         ;Variables de A
             mov alto1A, 0               ;Restituye alto1A
@@ -49,32 +49,33 @@ restV       MACRO
             mov residuo, 0              ;Restituye residuo           |  
             mov divisor, 0              ;Restituye divisor         --
             
-            mov a,0                    
-            mov b,0                    
-            mov c,0                     
-            mov d,0                    
-            mov e,0                   
-            mov f,0                    
-            mov g,0                     
-            mov h,0                     
-            mov i,0                     
-            mov j,0                     
-            mov k,0                     
-            mov l,0                     
-            mov m,0                 
-            mov n,0                     
-            mov o,0                     
-            mov p,0                   
-            mov q,0                    
-            mov r,0                    
-            mov s,0                     
-            mov t,0                   
-            mov aux,0                   
+            mov a,0                     ;  --
+            mov b,0                     ; |
+            mov c,0                     ; |
+            mov d,0                     ; |
+            mov e,0                     ; |
+            mov f,0                     ; |
+            mov g,0                     ; |
+            mov h,0                     ; |
+            mov i,0                     ; |
+            mov j,0                     ;/
+            mov k,0                     ;< Restituye variables para multiplicacion
+            mov l,0                     ;\
+            mov m,0                     ; |
+            mov n,0                     ; |
+            mov o,0                     ; |
+            mov p,0                     ; |
+            mov q,0                     ; |
+            mov r,0                     ; |
+            mov s,0                     ; |
+            mov t,0                     ; |
+            mov aux,0                   ;  -- 
             
             
             
-endm                                    
-piddatoA    MACRO                       
+endm                                    ;Fin de macro
+
+piddatoA    MACRO                       ;Macro ingresa dato A
             restR                       ;Restituye registros
             
 enteroA:                                ;Inicia enteroA
@@ -193,7 +194,8 @@ pfinB:                                  ;Inicia pfinB
 endm                                    ;Fin de macro
 
 
-SUMAR       MACRO SNA,SNB               
+SUMAR       MACRO SNA,SNB               ;Macro para sumar con acarreo
+       
             sub SNA, 30h		;Ajuste decimal
 	    sub SNB, 30h		;Ajuste decimal
             MOV AL,SNA                  ;SNA -> AL
@@ -205,7 +207,7 @@ SUMAR       MACRO SNA,SNB
             mov AH, 00                  ;restituye AH
 ENDM                                    ;Fin de macro
 
-RESTAR      MACRO RNA,RNB               
+RESTAR      MACRO RNA,RNB               ;Macro para restar con acarreo
             
             MOV AL, RNA                 ;RNA -> AL
             MOV AH, 00                  ;Restituye AH
@@ -217,7 +219,7 @@ RESTAR      MACRO RNA,RNB
                         
 ENDM                                    ;Fin de macro
 
-multiplicar MACRO MNA,MNB               
+multiplicar MACRO MNA,MNB               ;Macro para mutiplicar
                                         
             mov ah,00                   ;Restituye AH
             mov Al, MNA                 ;Asigna MNA a AL
@@ -229,7 +231,7 @@ multiplicar MACRO MNA,MNB
             mov carry,ah                ;Guarda acarreo                                        
 ENDM                                    ;Fin macro
 
-ajustemul   MACRO  V1, V2                
+ajustemul   MACRO  V1, V2               ;Macro para acarreo 
             
             add al, V1                  ;V1 + AL (v1 = resultado mul)
             add V2,ah                   ;V2 + AH (v2 = resultado sigmul)
@@ -239,7 +241,7 @@ ajustemul   MACRO  V1, V2
             add V2, ah                  ;AH --> V2
 ENDM                                    ;Fin de macro
 
-sumamulc    MACRO SMCA,SMCB             
+sumamulc    MACRO SMCA,SMCB             ;Macro para sumar resultados
     
             mov ah,0                    ;Restituye AH
             mov al,SMCA                 ;Asigna SMCA a AL
@@ -249,8 +251,11 @@ sumamulc    MACRO SMCA,SMCB
             mov ah, 00                  ;Restituye AH            
 ENDM                                    ;Fin macro
                                         
-enmascm     MACRO                       
-                                      
+enmascm     MACRO                       ;Macro para ajuste ASCII
+                                        ;
+                                        ;   X X X X X X X X
+                                        ;   0 0 1 1 0 0 0 0
+                                        ;  -----------------
             
             or alto1A, 30h              ;Alto1A a ascii
             or alto2A, 30h              ;Alto2A a ascii
@@ -263,9 +268,11 @@ enmascm     MACRO
             or bajo2B, 30h              ;Bajo2B a ascii
 ENDM                                    ;Fin macro 
 
-anddivi     MACRO                       
+anddivi     MACRO                       ;Macro ajuste a Decimal
     
-                                       
+                                        ;    0000 1111
+                                        ;and xxxx xxxx
+                                        ;   ___________
                                         
             and dive1, 0Fh              ;Ajusta dive1 a Decimal
             and dive2, 0Fh              ;Ajusta dive2 a Decimal
@@ -274,7 +281,7 @@ anddivi     MACRO
 
 ENDM     
 
-moverV      MACRO valor                 
+moverV      MACRO valor                 ;Macro quita decimal 
     
             sub AH, AH                  ;Restituye AH
             mov AL, dive1               ;dive1 -> AL
@@ -297,9 +304,11 @@ moverV      MACRO valor
             
 ENDM  
 
-enmascd     MACRO                       
+enmascd     MACRO                       ;Macro ajuste a ASCII 
     
-                                        
+                                        ;    0011 0000
+                                        ;or  xxxx xxxx
+                                        ;   ___________ 
             
             or dive1, 30h               ;Ajusta dive1 a ASCII
             or dive2, 30h               ;Ajusta dive2 a ASCII
@@ -321,19 +330,20 @@ ENDM
             
             ;Definicion de cadenas de caracteres
             ;-----------------------------------
-menumsj     db 13, 10, 09, 09, 'CALCULADORA U3', 13, 10
-            db 13, 10, 09, 09, ' 1.- Suma'
-            db 13, 10, 09, 09, ' 2.- Resta'
-            db 13, 10, 09, 09, ' 3.- Division'
-            db 13, 10, 09, 09, ' 4.- Multiplicacion'
+menumsj     db 13, 10, 09, 09, 'CALCULADORA', 13, 10
+            db 13, 10, ' Operaciones disponibles:', 13, 10
+            db 13, 10, 09, 09, ' 1.- Suma (A + B)'
+            db 13, 10, 09, 09, ' 2.- Resta (A - B)'
+            db 13, 10, 09, 09, ' 3.- Division (A / B)'
+            db 13, 10, 09, 09, ' 4.- Multiplicacion (A x B)'
             db 13, 10, 09, 09, ' 5.- Salir', 13, 10, '$'
-pdatoA      db 13, 10, 'Introduzca su primero valor: $'
-pdatoB      db 13, 10, 'Introduzca su segundo valor: $'
-opmenu      db 13, 10, 10, 09, 09, 'Seleccione una operacion: $' 
+pdatoA      db 13, 10, 'Introduzca el valor A: $'
+pdatoB      db 13, 10, 'Introduzca el valor B: $'
+opmenu      db 13, 10, 10, 09, 09, 'Elija una operacion: $' 
 retmenu     db 13, 10,10, ' Deseas continuar?'
             db 13, 10, ' 1.- Si'
             db 13, 10, ' 2.- No'
-            db 13, 10, 09, 'Seleccione una Operacion: $'
+            db 13, 10, 09, 'Ingrese una opcion: $'
 erro        db 13, 10, 10, 10, 09, 09, 'OPCION INCORRECTA, INTENTELO DE NUEVO$',13, 10
 smsj        db 13, 10, 09, 09, 09, 09, 'SUMA$'
 rmsj        db 13, 10, 09, 09, 09, 09, 'RESTA$'
@@ -377,27 +387,27 @@ diez        db 10                       ;x decima residuo = quita '.'
 
 carry       db 00                       ;Variable para acarreo
 
-a           db 00                       
-b           db 00                       
-c           db 00                       
-d           db 00                       
-e           db 00                       
-f           db 00                      
-g           db 00                     
-h           db 00                      
-i           db 00                      
-j           db 00                      
-k           db 00                       
-l           db 00                       
-m           db 00                       
-n           db 00                      
-o           db 00                       
-p           db 00                       
-q           db 00                      
-r           db 00                     
-s           db 00                       
-t           db 00                      
-aux         db 00                      
+a           db 00                       ;  /
+b           db 00                       ;  |
+c           db 00                       ;  |
+d           db 00                       ;  |
+e           db 00                       ;  |
+f           db 00                       ;  |
+g           db 00                       ;  |
+h           db 00                       ;  |
+i           db 00                       ;  |   Variables aux
+j           db 00                       ; /    para suma de
+k           db 00                       ; <    multiplicacion.
+l           db 00                       ; \
+m           db 00                       ;  |
+n           db 00                       ;  |
+o           db 00                       ;  |
+p           db 00                       ;  |
+q           db 00                       ;  |
+r           db 00                       ;  |
+s           db 00                       ;  |
+t           db 00                       ;  |
+aux         db 00                       ;  \
 
             .code
 inicia:                                 ;Inicia programa
@@ -453,10 +463,12 @@ errore:
 
             RET                         ;Regresa a call MENU
 MENU        endp                        ;Fin de procedimiento
-                       
+            ;---------------------------
+            ;Finaliza procedimiento MENU            
                              
                              
-            
+            ;Inicia procedimiento SUMA
+            ;-------------------------
 SUMA        proc                         
     
             limpant                     ;Limpia pantalla
@@ -534,9 +546,12 @@ menue:
 salire2: 
 		jmp SALIR            
 SUMA        endp                        
-                      
+            ;---------------------------
+            ;Finaliza procedimiento MENU            
                              
-            
+                             
+            ;Inicia procedimiento RESTA
+            ;--------------------------
 RESTA       proc near                      
     
             limpant                     ;Limpia pantalla.
@@ -705,11 +720,12 @@ salire3:
 		jmp SALIR
             
 RESTA       endp                        
-            
+            ;----------------------------
+            ;Finaliza procedimiento RESTA
                                 
                                         
-           
-            
+            ;Inicia procedimiento DIVI
+            ;-------------------------
 
 DIVI        proc near                   ;Inicia procedimiento DIVI
             
@@ -720,21 +736,21 @@ DIVI        proc near                   ;Inicia procedimiento DIVI
             
 
             
-            mov AL, alto1B             
-            mov dive1, AL                  
-                                        
-            mov AL, alto2B              
-            mov dive2, AL              
+            mov AL, alto1B              ;  --
+            mov dive1, AL               ; |    
+                                        ; |
+            mov AL, alto2B              ; |
+            mov dive2, AL               ; |
                                         ;<  Divisor -> Variables auxs...
             mov AL, bajo1B              ; |   ...Para quitar '.'
-            mov divd1, AL                            
-                                        
-            mov AL, bajo2B              
-            mov divd2, AL              
+            mov divd1, AL               ; |              
+                                        ; |
+            mov AL, bajo2B              ; |
+            mov divd2, AL               ;  --
             
             anddivi                     ;Convierte a decimal
             
-            moverV divisor              
+            moverV divisor              ;xx.xx --> xxxx -> divisor
             
             cmp divisor, 0              ;Si divisor = 0,...
             je diviindet                ;... salta a diviindet
@@ -769,51 +785,51 @@ Dresulneg:
 indiv:
             sub CX, CX                  ;Restituye CX
             
-            mov AL, alto1A              
-            mov dive1, AL                 
-                                        
-            mov AL, alto2A            
+            mov AL, alto1A              ; --
+            mov dive1, AL               ; |  
+                                        ; |
+            mov AL, alto2A              ; |
             mov dive2, AL               ; |
                                         ;<  Dividendo -> Variables auxs...
             mov AL, bajo1A              ; |   ... para quitar '.'
-            mov divd1, AL               
-                                        
-            mov AL, bajo2A              
-            mov divd2, AL               
+            mov divd1, AL               ; |
+                                        ; |
+            mov AL, bajo2A              ; |
+            mov divd2, AL               ;  --
             
 
 restadiv:
             enmascd                     ;Variables aux a ASCII 
             
-            mov BL, alto1B              
-            cmp dive1, BL              
-            ja  restad                  
-            jb  menore                  
-            mov BL, alto2B              
-            cmp dive2, BL               
+            mov BL, alto1B              ;  --
+            cmp dive1, BL               ; |
+            ja  restad                  ; |
+            jb  menore                  ; |
+            mov BL, alto2B              ; |
+            cmp dive2, BL               ; |
             ja  restad                  ; | Cmp Dividendo<Divisor
             jb  menor                   ;<  Si = salta a menor
             mov BL, bajo1B              ; | No = salta a restad
-            cmp divd1, BL              
-            ja  restad                  
-            jb  menor                   
-            mov BL, bajo2B              
-            cmp divd2, BL               
-            ja  restad                  
+            cmp divd1, BL               ; |
+            ja  restad                  ; |
+            jb  menor                   ; |
+            mov BL, bajo2B              ; |
+            cmp divd2, BL               ; |
+            ja  restad                  ;  --
             jb  menor
             jmp restad
 menore:
 jmp menor
 restad:                                 ;Division por restas
 
-            restar divd2, bajo2B        
-            mov divd2, AL               
-            restar divd1, bajo1B        
+            restar divd2, bajo2B        ;  --
+            mov divd2, AL               ; |
+            restar divd1, bajo1B        ; |
             mov divd1, AL               ;<  Dividendo - Divisor
-            restar dive2, alto2B        
-            mov dive2, AL               
-            restar dive1, alto1B        
-            mov dive1, AL               
+            restar dive2, alto2B        ; |
+            mov dive2, AL               ; |
+            restar dive1, alto1B        ; |
+            mov dive1, AL               ;  --
             
             inc CX                      ;Incrementa cociente
             
@@ -832,7 +848,7 @@ menor:
             
             anddivi                     ;Convierte a decimal
             
-            moverV residuo              
+            moverV residuo              ;xx.xx --> xxxx -> residuo
                                                                
 
                                         ;>> Division para primer decimal
@@ -899,10 +915,12 @@ salire4:
 		jmp SALIR            
             
 DIVI        endp                        
-           
+            ;---------------------------
+            ;Finaliza procedimiento DIVI 
                              
                              
-            
+            ;Inicia procedimiento MULTI
+            ;--------------------------
 
 MULTI       proc near                      
     
@@ -933,116 +951,116 @@ Mresulneg:
             imprime negativo	       	;imprime '-'
             jmp mu			; salta a mu (etiqueta multiplicacion)
 
-mu:					 
+mu:					;etiqueta multiplicar 
 
-            multiplicar bajo2a,bajo2b	
-            mov e, al		      
-            add d,ah		        
-            				
-	    multiplicar bajo1a,bajo2b	
-            ajustemul d, c		
-						    
-            multiplicar alto2a,bajo2b  
-            ajustemul c, b			    
- 					
-            multiplicar alto1a,bajo2b  	; 	multiplica unidad b por unidad 1
-            ajustemul b, a		;    unidad b por decena 1
+            multiplicar bajo2a,bajo2b	;   	      --
+            mov e, al		        ; 	     |
+            add d,ah		        ; 	     |
+            				;            |		(multiplica paso a paso)
+	    multiplicar bajo1a,bajo2b	;  	     |
+            ajustemul d, c		;            |
+					; 	     |
+            multiplicar alto2a,bajo2b	; 	     | 	Suma acarreo despues de  
+            ajustemul c, b		; 	     |	multiplicar 		ajuste	| | |
+ 					; 	     |	
+            multiplicar alto1a,bajo2b  	; 	     |	multiplica unidad b por unidad 1
+            ajustemul b, a		; 	     |		   unidad b por decena 1
 					;segundalinea|		   unidad b por centena 1
-            multiplicar bajo2a,bajo1b	;   unidad b por millar 1
-            mov j, al	           	;	suma acarreos 
-            add i,ah		       
-            multiplicar bajo1a,bajo1b	
-            ajustemul i, h	        ;	multiplica decena b por unidad 1
-					
-            multiplicar alto2a,bajo1b   ;  decena b por centena 1
-            ajustemul h, g      	;  decena b por millar 1
-						
-            multiplicar alto1a,bajo1b 	
-            ajustemul g, f      
+            multiplicar bajo2a,bajo1b	;	     |		   unidad b por millar 1
+            mov j, al	           	;	     |	suma acarreos 
+            add i,ah		        ;	     |	
+            multiplicar bajo1a,bajo1b	;	     |	
+            ajustemul i, h	        ;	     |	multiplica decena b por unidad 1
+					;	     |		   decena b por decena 1
+            multiplicar alto2a,bajo1b   ;	    /		   decena b por centena 1
+            ajustemul h, g      	;	   /		   decena b por millar 1
+					;	   \	
+            multiplicar alto1a,bajo1b 	;           \	
+            ajustemul g, f      	;	     |
 					;tercerlinea |
-            multiplicar bajo2a,alto2b 	;multiplica centena b por unidad 1
-            mov o, al			;centena b por decena 1
-            add n,ah			; centena b por centena 1
-            multiplicar bajo1a,alto2b	; centena b por millar 1
-            ajustemul n, m       
-					
-            multiplicar alto2a,alto2b 	
-            ajustemul m, l         
-					;	   
-            multiplicar alto1a,alto2b 	
-            ajustemul l, k	
-					
-            multiplicar bajo2a,alto1b	;millar b por decena 1
-            mov t, al			; millar b por centena 1
-            add s,ah			;millar b por millar 1
-            multiplicar bajo1a,alto1b
-            ajustemul s, r
-					
-            multiplicar alto2a,alto1b 	
-            ajustemul r, q	        
-						     
-            multiplicar alto1a,alto1b	
-            ajustemul q, p		
+            multiplicar bajo2a,alto2b 	;	     |	multiplica centena b por unidad 1
+            mov o, al			;	     |		   centena b por decena 1
+            add n,ah			;	     |		   centena b por centena 1
+            multiplicar bajo1a,alto2b	;	     |		   centena b por millar 1
+            ajustemul n, m         	;	     |
+					;	     |
+            multiplicar alto2a,alto2b 	;            |
+            ajustemul m, l         	;	     |
+					;	     |
+            multiplicar alto1a,alto2b 	;	     |
+            ajustemul l, k		;            |
+					;cuartalinea |	multiplica millar b por unidad 1
+            multiplicar bajo2a,alto1b	;	     |		   millar b por decena 1
+            mov t, al			;	     |		   millar b por centena 1
+            add s,ah			;	     |		   millar b por millar 1
+            multiplicar bajo1a,alto1b	;	     |
+            ajustemul s, r		;	     |
+					;	     |
+            multiplicar alto2a,alto1b 	;	     |
+            ajustemul r, q	        ;	     |
+					;	     |
+            multiplicar alto1a,alto1b	;	     |
+            ajustemul q, p		;	      --
             				
-            mov ah, 00			
-            mov  Al, E			
-            push AX			
-            				
-            sumamulc D, J			
-            push AX 			
-            add c,dl			
-            mov cl, c			;se suman las lineas y el resultado 
-            add i,cl			;se mete en la pila
-            sumamulc i,o		
-            push ax			
-            add b,dl				
-            mov cl, b			
-            add h,cl			
-            mov cl, h			
-            add n,cl			
-            sumamulc n,t		 
-            push ax			 	
-            add a,dl			
-            mov cl, a			
-            add g,cl				
-            mov cl, g			  
-            add m,cl			 			
-            sumamulc m,s		               
-            push ax			
-            add f,dl			
-            mov cl, f			
-            add l,cl			
-            sumamulc l,r		
-            push ax			
-            add k,dl			
-            sumamulc k,q		
-            push ax			
-            add p,dl			
-            mov ah, 00			
-            mov al,p			
-            push ax     		
+            mov ah, 00			;	      --
+            mov  Al, E			;	     |
+            push AX			;	     |
+            				;	     |
+            sumamulc D, J		;            |	
+            push AX 			;	     |
+            add c,dl			;	     |
+            mov cl, c			;	     |     se suman las lineas y el resultado 
+            add i,cl			;            |     se mete en la pila
+            sumamulc i,o		;	     |
+            push ax			;	     |
+            add b,dl			;	     |	        x x . x x	   multiplicando	
+            mov cl, b			;	     |	  x     x x . x x          multiplicador
+            add h,cl			;	     |	     ---------------------	
+            mov cl, h			;	     |	 	    a b c d e
+            add n,cl			;	     |	  +       f g h i j        (suma entre lineas)
+            sumamulc n,t		;	     |	        k l m n o 
+            push ax			;           /         p q r s t  	
+            add a,dl			;          /	     ---------------------
+            mov cl, a			;	   \	      x x x x.x x x x	   producto
+            add g,cl			;	    \	     |_______  _______|	
+            mov cl, g			;      	     |               \/    
+            add m,cl			;	     |	       resultado en pila 			
+            sumamulc m,s		;	     |               
+            push ax			;	     |
+            add f,dl			;	     |
+            mov cl, f			;	     |
+            add l,cl			;	     |
+            sumamulc l,r		;	     |
+            push ax			;    	     |
+            add k,dl			;	     |
+            sumamulc k,q		;	     |
+            push ax			;	     |
+            add p,dl			;	     | 
+            mov ah, 00			;	     |
+            mov al,p			;	     |
+            push ax     		;	      --
             
-            pop dx			
-            pop dx			
-            pop dx			
-            add dl, 30h			
-            mov ah, 02			
-            int 21h			
-            pop dx 			     
-            add dl, 30h			     
+            pop dx			;	      --
+            pop dx			;    	     |
+            pop dx			;	     |
+            add dl, 30h			;	     |
+            mov ah, 02			;	     |
+            int 21h			;	     |
+            pop dx 			;	     |     
+            add dl, 30h			;	     |     
             mov ah, 02			;	    /      Extrae de la pila	
             int 21h  			;	    \      convierte a decimal
             mov dl,2Eh			;	     |     e imprime 
-            mov ah, 02			
-            int 21h			
-            pop dx 			
-            add dl, 30h			
-            mov ah, 02			
-            int 21h 			
-            pop dx			
-            add dl, 30h		
-            mov ah, 02			
-            int 21h 		
+            mov ah, 02			;	     |
+            int 21h			;	     |
+            pop dx 			;	     |
+            add dl, 30h			;	     |
+            mov ah, 02			;	     |
+            int 21h 			;	     |
+            pop dx			;	     |
+            add dl, 30h			;	     |
+            mov ah, 02			;	     |
+            int 21h 			;	      --
             
             pop dx 
             pop dx
@@ -1063,8 +1081,8 @@ MULTI       endp
 
                                   
                                   
-            ; procedimiento SALIR
-            
+            ;Inicia procedimiento SALIR
+            ;--------------------------
 SALIR       proc near
     
             limpant                     ;Limpia pantalla
@@ -1075,11 +1093,12 @@ SALIR       proc near
             jmp fin                     ;Salta a fin
             
 SALIR       endp
-            
+            ;----------------------------
+            ;Finaliza procedimiento SALIR
                                     
                                     
-            ; procedimiento ERROR
-            
+            ;Inicia procedimiento ERROR
+            ;--------------------------
 ERROR       proc near
     
             limpant                     ;Limpia pantalla
@@ -1090,5 +1109,6 @@ ERROR       proc near
             jmp MENU                    ;Salta a MENU
             
 ERROR       endp
-            
+            ;----------------------------
+            ;Finaliza procedimiento ERROR    
             end inicia 
